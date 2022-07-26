@@ -3,6 +3,7 @@
 ### chore
 范围|描述|commitId
 --|--|--
+ all | 增加 eslint 校验 | e85488d
  all | 增加 git commit 校验 | f58566d
 
 
