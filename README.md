@@ -1,6 +1,6 @@
 # tky
 
-## Project setup
+## 依赖管理
 ```
 npm install
 ```
