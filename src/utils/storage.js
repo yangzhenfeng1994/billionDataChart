@@ -1,2 +1,2 @@
-const storage = window.localStorage;
-export default storage;
+const storage = window.localStorage
+export default storage

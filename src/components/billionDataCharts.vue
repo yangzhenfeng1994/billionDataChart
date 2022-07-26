@@ -1,15 +1,15 @@
 <template>
-	<div class="billionDataCharts"></div>
+  <div class="billionDataCharts"></div>
 </template>
 
 <script>
 export default {
-	name: 'billionDataCharts',
-	data() {
-		return {};
-	},
-	methods: {},
-};
+  name: 'billionDataCharts',
+  data() {
+    return {}
+  },
+  methods: {},
+}
 </script>
 
 <style lang="less" scoped></style>

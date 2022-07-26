@@ -26,7 +26,7 @@ pnpm run serve || pnpm run dev
 通过 husky + lint-staged + commitizen 进行提交前校验,保障提交代码的一致性
 
 ### 开发工具
-开发工具统一采用 vscode, 安装插件 eslint + prettier + vetur
+开发工具统一采用 vscode, 安装插件 eslint + prettier + vetur 开启 "editor.formatOnSave": true 在保存时自动校验格式
 eslint 规则为 .eslintrc
 
 ### 开发环境
@@ -87,6 +87,7 @@ pnpm run cz
     + main.js 工程入口
 + .eslintrc eslint 配置文件
 + .gitignore 要被 git 忽略的文件
++ .prettierignore 禁止被 prettier 格式化的文件,主要是 node_modules/打包后/md 这类文件
 + .prettierrc 格式配置文件
 + babel.config.js babel 的配置项
 + CHANGELOG.md 提交生成的日志,commit 自动生成
