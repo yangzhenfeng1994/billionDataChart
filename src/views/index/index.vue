@@ -1,14 +1,13 @@
 <template>
-  <div class="billionDataCharts"></div>
+  <div class="index">index</div>
 </template>
 
 <script>
 export default {
-  name: 'billionDataCharts',
+  name: 'index',
   data() {
     return {}
   },
-  methods: {},
 }
 </script>
 

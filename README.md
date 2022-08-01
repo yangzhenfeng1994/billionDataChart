@@ -1,5 +1,6 @@
 # 铁科院可视化项目-前端工程
 
+*** 开发者需要在本地注入自己的标识,否则无法调试,详情参见 调试规范
 ## 依赖管理
 考虑到npm yarn对于空包依赖的问题,项目依赖采用pnpm统一管理,通过pnpm-lock.yaml统一锁定版本
 
@@ -63,9 +64,11 @@ pnpm run cz
     + assets 静态资源,图片什么的
         + *以模块/页面为维度拆分文件夹
     + components 通用组件,需要多个模块或者页面用到的放在这
-        + xxxPubComponent.vue 通过指定尾缀 PubComponent 命名区分
+        + xxxPubComponent.vue/xxxPubComponent 通过指定尾缀 PubComponent 命名区分
     + configs 配置项,作为工程级别全局配置使用
-        + xxxConfig*.js 以范围为维度拆分,通过追加尾缀 Config 区分
+        + xxxConfig.js 以范围为维度拆分,通过追加尾缀 Config 区分
+    + demos 作为通用组件的展示页面和文档使用
+        + xxxDemo.vue 以组件为维度,页面内注明使用方式,入参出参,交互等信息
     + mixins 混入,全局或多组件引入共同逻辑,尽量不要使用,会造成维护理解困难
         + xxxMixin.js 以范围为维度拆分,通过追加尾缀 Mixin 区分
     + mocks mock 数据
@@ -175,3 +178,17 @@ git 规范通过 commitizen 管理
     1. template
     2. script
     3. style
+
+### 调试规范
+以项目经历考虑到 debug 展示消息过于复杂的问题,统一封装了console.log方法,劫持方法第一个参数作为验证,使用者需要在localstorage 中注入 devUser 为自己的代表值,并在调用console.log的第一个参数传入方可使用,这样相互之间不会有影响
+```javascript
+console.log('xyz', this.data)
+```
+
+## 组件封装
+### 1.大数据量图表组件
+### 2.通用表格组件
+
+
+
+firewall-cmd

@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view />
   </div>
 </template>
@@ -18,6 +14,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+</style>
+
+<style>
 * {
   margin: 0;
   padding: 0;
