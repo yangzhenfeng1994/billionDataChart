@@ -55,6 +55,7 @@ export default {
       const data = this.data
       const option = {
         // animation: true,
+        animation: false,
         tooltip: {
           trigger: 'axis',
         },
@@ -107,6 +108,13 @@ export default {
     this.$nextTick(() => {
       this.init()
     })
+    // setInterval(() => {
+    //   this.data.forEach((item) => {
+    //     item.shift()
+    //     item.push(~~(Math.random() * 20))
+    //   })
+    //   this.updateChart()
+    // }, 100)
   },
 }
 </script>

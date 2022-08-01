@@ -59,7 +59,7 @@ export default {
       dates: [],
       xData: [],
       yData: [],
-      defaultPercent: 10,
+      defaultPercent: 1,
       settings: {
         showLines: true,
         showDates: true,
@@ -80,7 +80,7 @@ export default {
       return this.dates.filter((item) => item.show)
     },
     showPercent() {
-      return this.defaultPercent / this.settings.scale
+      return this.defaultPercent * this.settings.scale
     },
     startPercent() {
       return Math.max(this.settings.now - this.showPercent / 2, 0)

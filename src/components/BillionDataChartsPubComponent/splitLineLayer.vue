@@ -1,14 +1,11 @@
 <template>
   <div class="splitLineLayer">
-    {{ solidArr }}
-    {{ dottedArr }}
     <div class="dottedLines">
-      <div class="line" v-for="line in solidArr" :key="line"></div>
+      <div class="line" v-for="line in dottedArr" :key="line" :style="{ left: line + 'px' }"></div>
     </div>
     <div class="solidLines">
-      <div class="line" v-for="line in dottedArr" :key="line"></div>
+      <div class="line" v-for="line in solidArr" :key="line" :style="{ left: line + 'px' }"></div>
     </div>
-    <!-- {{ xData }} -->
   </div>
 </template>
 
@@ -45,11 +42,24 @@ export default {
     all() {
       return this.end - this.start
     },
+    singleWidth() {
+      return this.layerWidth / this.all
+    },
     solidArr() {
-      return ~~(this.all / this.solidLineGap)
+      const arr = []
+      let s = this.start + this.solidLineGap - (this.start % this.solidLineGap)
+      for (let i = s; i <= this.end; i += this.solidLineGap) {
+        arr.push((i - this.start) * this.singleWidth)
+      }
+      return arr
     },
     dottedArr() {
-      return ~~(this.all / this.dottedLineGap)
+      const arr = []
+      let s = this.start + this.dottedLineGap - (this.start % this.dottedLineGap)
+      for (let i = s; i <= this.end; i += this.dottedLineGap) {
+        arr.push((i - this.start) * this.singleWidth)
+      }
+      return arr
     },
   },
   data() {
@@ -72,21 +82,24 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     .line {
       height: 100%;
       width: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   }
   .dottedLines {
     .line {
-      border-right: 1px solid #000;
+      border-right: 1px dotted #000;
     }
   }
   .solidLines {
     .line {
-      border-right: 1px dotted #000;
+      border-right: 1px solid #000;
     }
   }
 }
