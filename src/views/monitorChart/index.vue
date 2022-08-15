@@ -15,7 +15,13 @@
       @changeContrastDate="contrastDateId = $event"
     ></dates>
     <div class="charts">
-      <settting :data="settings" @sure="initCharts" @resize="resize" @jump="jump"></settting>
+      <settting
+        :data="settings"
+        @sure="initCharts"
+        @resize="resize"
+        @jump="jump"
+        @play="play"
+      ></settting>
       <charts
         ref="charts"
         :xData="filterXdata"
@@ -209,6 +215,22 @@ export default {
       this.$nextTick(() => {
         this.$refs.charts.resizeCharts()
       })
+    },
+    play() {
+      let speed = 100
+      let step = 1
+      let n = 0
+      var fn = () => {
+        n += step
+        this.settings.now = n
+        this.initCharts()
+        if (n < 100) {
+          setTimeout(() => {
+            fn()
+          }, speed)
+        }
+      }
+      fn()
     },
     jump() {
       this.settings.now = this.settings.center * 1

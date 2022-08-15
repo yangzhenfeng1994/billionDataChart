@@ -1,11 +1,14 @@
 <template>
   <div class="settings">
     <div class="item">
-      <el-button @click="sure">确定</el-button>
+      <el-button @click="sure">重绘</el-button>
     </div>
     <div class="item">
       <el-checkbox v-model="data.showLines" @change="resize">通道列表</el-checkbox>
       <el-checkbox v-model="data.showDates" @change="resize">日期列表</el-checkbox>
+    </div>
+    <div class="item">
+      <el-button @click="play">播放</el-button>
     </div>
     <div class="item">
       跳转里程:
@@ -47,6 +50,9 @@ export default {
     },
     resize() {
       this.$emit('resize')
+    },
+    play() {
+      this.$emit('play')
     },
   },
 }
