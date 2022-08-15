@@ -24,6 +24,7 @@
         :dates="selectedDates"
         :contrastDateIdx="contrastDateIdx"
         @dblclickInfo="dblclickInfo"
+        @clickLayers="clickLayers"
       ></charts>
       <setMaxModal
         v-if="setLineOptionIdx !== -1"
@@ -31,6 +32,11 @@
         @close="setLineOptionIdx = -1"
         @sure="setLineOption"
       ></setMaxModal>
+      <clickYmodal
+        v-if="showClickYmodal"
+        :value="showClickYmodalInfo"
+        @close="showClickYmodal = false"
+      ></clickYmodal>
     </div>
   </div>
 </template>
@@ -40,6 +46,7 @@ import lines from './components/lines.vue'
 import dates from './components/dates.vue'
 import settting from './components/setting.vue'
 import setMaxModal from './components/setMaxModal'
+import clickYmodal from './components/clickYmodal'
 
 import charts from '@/components/BillionDataChartsPubComponent'
 
@@ -52,6 +59,7 @@ export default {
     settting,
     charts,
     setMaxModal,
+    clickYmodal,
   },
   data() {
     return {
@@ -70,6 +78,8 @@ export default {
       wrapperWidth: 2000,
       setLineOptionIdx: -1,
       contrastDateId: '',
+      showClickYmodal: false,
+      showClickYmodalInfo: {},
     }
   },
   computed: {
@@ -211,6 +221,18 @@ export default {
           this.setLineOptionIdx = -1
         })
       }
+    },
+    clickLayers(xIdx, yArr) {
+      if (!yArr.length) return
+      this.showClickYmodalInfo = {
+        lines: this.lines.filter((item, idx) => yArr.includes(idx)),
+        xData: this.filterXdata[xIdx],
+        yDatas: this.filterYdata
+          .filter((item, idx) => yArr.includes(idx))
+          .map((item) => item.map((child) => child[xIdx])),
+      }
+
+      this.showClickYmodal = true
     },
   },
   mounted() {

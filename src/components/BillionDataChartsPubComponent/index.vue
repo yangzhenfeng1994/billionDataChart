@@ -1,6 +1,6 @@
 <template>
   <div ref="BillionDataCharts" class="BillionDataCharts" @mouseleave="mouseleave">
-    <div class="layers" ref="layers">
+    <div class="layers" ref="layers" @click="clickLayers">
       <chartLayer
         ref="charts"
         :xData="xData"
@@ -165,6 +165,19 @@ export default {
     dragItem() {
       const tar = this.init + this.clientY - this.start
       this.$set(this.dragArr, this.dragIdx, tar)
+    },
+    clickLayers() {
+      const arr = []
+      let t = 0
+      this.lines.forEach((item, idx) => {
+        const nowYtop = t + (this.tops[idx] || 0)
+        const nowYbottom = nowYtop + (this.heights[idx] || 100)
+        if (nowYtop <= this.mouseY && nowYbottom >= this.mouseY) {
+          arr.push(idx)
+        }
+        t += this.heights[idx] || 100
+      })
+      this.$emit('clickLayers', this.mouseIdx, arr)
     },
   },
   mounted() {
