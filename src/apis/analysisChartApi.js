@@ -2,6 +2,7 @@ import lines from '@/mocks/billionDataCharts/lines'
 import dates from '@/mocks/billionDataCharts/dates'
 import xData from '@/mocks/billionDataCharts/xData'
 import yData from '@/mocks/billionDataCharts/yData'
+import faultData from '@/mocks/billionDataCharts/faultData'
 
 export function getLines() {
   return new Promise((res) => {
@@ -34,5 +35,11 @@ export function getYdata(option) {
 
   return new Promise((res) => {
     res(target)
+  })
+}
+
+export function getFaultData() {
+  return new Promise((res) => {
+    res(faultData)
   })
 }

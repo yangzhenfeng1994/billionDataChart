@@ -5,7 +5,9 @@
 --|--|--
  pubComponent page | 增加大数据量图表，波形图页面 | [a8698a1](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/a8698a1)
  pubComponent page | 增加大数据量图表，波形图页面 | [7106c75](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/7106c75)
+ pubComponents pages | 增加播放功能 | [5e73051](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/5e73051)
  pubComponents | 增加y轴测量功能 | [e3399ae](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/e3399ae)
+ publicComponents pages | 增加展示单个通道功能 | [35d1be1](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/35d1be1)
 
 
 ### 📝 文档

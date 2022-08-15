@@ -63,7 +63,7 @@ import contextmenuModal from './components/contextmenuModal'
 
 import charts from '@/components/BillionDataChartsPubComponent'
 
-import { getLines, getDates, getXdata, getYdata } from '@/apis/analysisChartApi'
+import { getLines, getDates, getXdata, getYdata, getFaultData } from '@/apis/analysisChartApi'
 export default {
   name: 'monitorChart',
   components: {
@@ -81,6 +81,7 @@ export default {
       dates: [],
       xData: [],
       yData: [],
+      faultData: [],
       defaultPercent: 1,
       settings: {
         showLines: true,
@@ -189,6 +190,7 @@ export default {
       })
       Promise.all([lines, dates, xData]).then(() => {
         this.getYdataMethod()
+        this.getFaultDataMethod()
       })
       this.$nextTick(() => {
         const chartsDom = document.querySelector('.chartLayer')
@@ -209,6 +211,14 @@ export default {
       }).then((res) => {
         this.yData = res
         this.initCharts()
+      })
+    },
+    getFaultDataMethod() {
+      getFaultData({
+        lines: this.selectedLines.map((item) => item.id),
+        dates: this.selectedDates.map((item) => item.id),
+      }).then((res) => {
+        this.faultData = res
       })
     },
     resize() {
