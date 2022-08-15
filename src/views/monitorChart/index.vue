@@ -25,6 +25,7 @@
         :contrastDateIdx="contrastDateIdx"
         @dblclickInfo="dblclickInfo"
         @clickLayers="clickLayers"
+        @contextmenuInfo="contextmenuInfo"
       ></charts>
       <setMaxModal
         v-if="setLineOptionIdx !== -1"
@@ -37,6 +38,11 @@
         :value="showClickYmodalInfo"
         @close="showClickYmodal = false"
       ></clickYmodal>
+      <contextmenuModal
+        v-if="showContextmenuModal"
+        :value="showContextmenuModalInfo"
+        @close="showContextmenuModal = false"
+      ></contextmenuModal>
     </div>
   </div>
 </template>
@@ -47,6 +53,7 @@ import dates from './components/dates.vue'
 import settting from './components/setting.vue'
 import setMaxModal from './components/setMaxModal'
 import clickYmodal from './components/clickYmodal'
+import contextmenuModal from './components/contextmenuModal'
 
 import charts from '@/components/BillionDataChartsPubComponent'
 
@@ -60,6 +67,7 @@ export default {
     charts,
     setMaxModal,
     clickYmodal,
+    contextmenuModal,
   },
   data() {
     return {
@@ -80,6 +88,8 @@ export default {
       contrastDateId: '',
       showClickYmodal: false,
       showClickYmodalInfo: {},
+      showContextmenuModal: false,
+      showContextmenuModalInfo: {},
     }
   },
   computed: {
@@ -231,8 +241,11 @@ export default {
           .filter((item, idx) => yArr.includes(idx))
           .map((item) => item.map((child) => child[xIdx])),
       }
-
       this.showClickYmodal = true
+    },
+    contextmenuInfo(arr) {
+      this.showContextmenuModal = true
+      this.showContextmenuModalInfo = arr
     },
   },
   mounted() {

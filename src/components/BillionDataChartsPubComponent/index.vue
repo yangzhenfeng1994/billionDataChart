@@ -42,6 +42,7 @@
         }"
         @dblclick="dblclickInfo"
         @drag="dragInfo"
+        @contextmenu="contextmenuInfo"
       ></infoLayer>
     </div>
   </div>
@@ -178,6 +179,9 @@ export default {
         t += this.heights[idx] || 100
       })
       this.$emit('clickLayers', this.mouseIdx, arr)
+    },
+    contextmenuInfo(item, idx) {
+      this.$emit('contextmenuInfo', this.yData[idx])
     },
   },
   mounted() {

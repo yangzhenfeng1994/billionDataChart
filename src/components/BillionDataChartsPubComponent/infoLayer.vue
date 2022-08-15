@@ -3,9 +3,12 @@
     <div
       class="item"
       v-for="(item, idx) in lines"
+      :class="{ selected: selectedLine === item }"
       :key="item.id"
       :style="{ top: (styles.tops[idx] || 0) + 'px', height: (styles.heights[idx] || 100) + 'px' }"
+      @click="select(item, idx)"
       @dblclick="dblClick(idx)"
+      @contextmenu="contextmenu($event, item, idx)"
     >
       <div class="name">
         {{ item.label }}
@@ -63,7 +66,9 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      selectedLine: null,
+    }
   },
   methods: {
     dblClick(idx) {
@@ -71,6 +76,15 @@ export default {
     },
     drag(type, idx, e) {
       this.$emit('drag', type, idx, e)
+    },
+    select(item, idx) {
+      this.selectedLine = item
+      console.log(idx)
+    },
+    contextmenu(e, item, idx) {
+      if (this.selectedLine !== item) return
+      e.preventDefault()
+      this.$emit('contextmenu', item, idx)
     },
   },
 }
@@ -88,11 +102,16 @@ export default {
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    background: #e9e9e9;
+    transition: 0.2s;
     &:hover {
       background: rgba(0, 0, 0, 0.1);
       .bar {
         opacity: 1;
       }
+    }
+    &.selected {
+      background: #fff;
     }
     .number {
       width: 100%;
