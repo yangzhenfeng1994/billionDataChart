@@ -11,18 +11,21 @@ export default {
   name: 'singleChart',
   props: {
     line: {
+      // 当前通道的配置
       type: Object,
       default() {
         return {}
       },
     },
     colors: {
+      // 日期那边计算下来的颜色
       type: Array,
       default() {
         return []
       },
     },
     data: {
+      // 当前通道的数据
       type: Array,
       default() {
         return []
@@ -31,11 +34,12 @@ export default {
   },
   data() {
     return {
-      chart: null,
+      chart: null, // 图表实例
     }
   },
   methods: {
     init() {
+      // 初始化图标实例,绑定拖动窗口事件
       this.chart = echarts.init(this.$refs.chartDom)
       window.addEventListener('resize', () => {
         this.resizeChart()
@@ -45,6 +49,7 @@ export default {
       // })
     },
     updateChart() {
+      // 更新图标实例
       if (!this.chart) {
         // 第一次获取数据可能比图表初始化快,处理一下
         setTimeout(() => {
@@ -115,6 +120,11 @@ export default {
     //   })
     //   this.updateChart()
     // }, 100)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', () => {
+      this.resizeChart()
+    })
   },
 }
 </script>

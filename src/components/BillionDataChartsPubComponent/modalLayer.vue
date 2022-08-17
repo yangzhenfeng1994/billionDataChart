@@ -1,6 +1,8 @@
 <template>
   <div class="modalLayer" v-show="mouseX && mouseX < layerWidth">
+    <!-- 红线 -->
     <div class="line" :style="{ left: mouseX + 'px' }"></div>
+    <!-- 弹窗 -->
     <div class="modal" :style="modalStyle">
       <div class="row" v-for="(row, idx) in showDatas" idx :key="idx">
         <div class="label">
@@ -20,56 +22,68 @@ export default {
   name: 'modalLayer',
   props: {
     lines: {
+      // 通道数据
       type: Array,
       default() {
         return []
       },
     },
     mouseX: {
+      // 鼠标 x 的位置,用来确定线和弹窗的位置
       type: Number,
       default: -1000,
     },
     mouseY: {
+      // 鼠标 y 的位置,用来确定弹窗的位置
       type: Number,
       default: -1000,
     },
     yData: {
+      //y 数据
       type: Array,
       default() {
         return []
       },
     },
     dates: {
+      // 日期数据
       type: Array,
       default() {
         return []
       },
     },
     contrastDateIdx: {
+      // 对比日期的索引
       type: Number,
       default: -1,
     },
     mouseIdx: {
+      // 鼠标当前的索引
       type: Number,
       default: -1,
     },
     layerWidth: {
+      // 图层宽度,用来处理弹窗越界
       type: Number,
       default: 1000,
     },
     layerHeight: {
+      // 图层高度,用来处理弹窗越界
       type: Number,
       default: 0,
     },
   },
   computed: {
     modalX() {
+      // 计算当前弹窗 x 的位置,控制越界情况
       return Math.min(this.mouseX + 8, this.layerWidth - this.modalWidth - 8)
     },
     modalY() {
+      // 计算当前弹窗 y 的位置,控制越界情况
       return Math.min(this.mouseY + 8, this.layerHeight - this.modalHeight - 8)
     },
     modalStyle() {
+      // 当前弹窗的样式
       return {
         left: this.modalX + 'px',
         top: this.modalY + 'px',
@@ -78,13 +92,14 @@ export default {
       }
     },
     showDatas() {
+      // 当前展示的数据
       return this.yData.map((item) => item.map((chi) => chi[this.mouseIdx]))
     },
   },
   data() {
     return {
-      modalHeight: 240,
-      modalWidth: 200,
+      modalHeight: 240, // 弹窗高度
+      modalWidth: 200, // 弹窗宽度
     }
   },
 }

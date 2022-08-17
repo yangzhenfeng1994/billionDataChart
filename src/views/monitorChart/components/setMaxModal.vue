@@ -51,6 +51,7 @@ export default {
     value: {
       immediate: true,
       handler(n) {
+        // 深拷贝和默认值处理
         this.setObject = JSON.parse(JSON.stringify(n))
         if (!this.setObject.max) this.$set(this.setObject, 'max', 20)
         if (!this.setObject.min) this.$set(this.setObject, 'min', 0)

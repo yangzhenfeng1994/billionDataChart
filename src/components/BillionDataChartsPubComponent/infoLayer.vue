@@ -1,5 +1,6 @@
 <template>
   <div class="infoLayer">
+    <!-- 通道信息展示 -->
     <div
       class="item"
       v-for="(item, idx) in lines"
@@ -14,17 +15,22 @@
         {{ item.label }}
       </div>
       <div class="number">
+        <!-- 对比数据 -->
         <div class="contrastData">
           {{ yData[idx]?.[contrastDateIdx]?.[mouseIdx] }}
         </div>
+
+        <!-- 最新日期的数据 -->
         <div class="newData">
           {{ yData[idx]?.[yData[idx].length - 1]?.[mouseIdx] }}
         </div>
       </div>
       <div class="dragHeightBar">
+        <!-- 拖动更改高度 -->
         <div class="bar" @mousedown="drag('height', idx, $event)"></div>
       </div>
       <div class="dragTopBar">
+        <!-- 拖动更改位置 -->
         <div class="bar" @mousedown="drag('top', idx, $event)"></div>
       </div>
     </div>
@@ -36,18 +42,21 @@ export default {
   name: 'infoLayer',
   props: {
     lines: {
+      // 通道数据
       type: Array,
       default() {
         return []
       },
     },
     yData: {
+      // y 轴数据
       type: Array,
       default() {
         return []
       },
     },
     styles: {
+      // 样式数据,通道高度和位置
       type: Object,
       default() {
         return {
@@ -57,30 +66,36 @@ export default {
       },
     },
     contrastDateIdx: {
+      // 对比的日期的索引
       type: Number,
       default: 0,
     },
     mouseIdx: {
+      // 鼠标当前 X 轴的索引
       type: Number,
       default: 0,
     },
   },
   data() {
     return {
-      selectedLine: null,
+      selectedLine: null, // 当前单击选择的通道
     }
   },
   methods: {
     dblClick(idx) {
+      // 双击事件透传
       this.$emit('dblclick', idx)
     },
     drag(type, idx, e) {
+      // 拖动事件
       this.$emit('drag', type, idx, e)
     },
     select(item) {
+      // 点击选择一个通道
       this.selectedLine = item
     },
     contextmenu(e, item, idx) {
+      // 选择的通道截取右击事件透传,非选择的正常右击
       if (this.selectedLine !== item) return
       e.preventDefault()
       this.$emit('contextmenu', item, idx)

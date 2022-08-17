@@ -1,3 +1,4 @@
+// 通道数据 mock
 const lines = [
   { label: '通道1', id: 'ID1', show: true },
   { label: '通道2', id: 'ID2', show: true },

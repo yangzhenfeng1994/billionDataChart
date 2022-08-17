@@ -1,4 +1,5 @@
-import line1 from './line1'
+// y轴数据mock
+import line1 from './line1' //不同的通道数据,随机分配,制造不同的曲线
 import line2 from './line2'
 import line3 from './line3'
 import line4 from './line4'
@@ -109,13 +110,13 @@ const data = {
 }
 export default data
 
-const obj = {}
-for (let i = 0; i < 100; i++) {
-  const item = {
-    date1: 'line' + Math.ceil(Math.random() * 6),
-    date2: 'line' + Math.ceil(Math.random() * 6),
-    date3: 'line' + Math.ceil(Math.random() * 6),
-  }
-  obj['ID' + (i + 1)] = item
-}
-JSON.stringify(obj)
+// const obj = {}
+// for (let i = 0; i < 100; i++) {
+//   const item = {
+//     date1: 'line' + Math.ceil(Math.random() * 6),
+//     date2: 'line' + Math.ceil(Math.random() * 6),
+//     date3: 'line' + Math.ceil(Math.random() * 6),
+//   }
+//   obj['ID' + (i + 1)] = item
+// }
+// JSON.stringify(obj)

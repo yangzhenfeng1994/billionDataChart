@@ -8,6 +8,9 @@
       <el-checkbox v-model="data.showDates" @change="resize">日期列表</el-checkbox>
     </div>
     <div class="item">
+      <el-switch v-model="data.receiveClick" active-text="点击" inactive-text="拖动"> </el-switch>
+    </div>
+    <div class="item">
       <el-button @click="play">播放</el-button>
     </div>
     <div class="item">

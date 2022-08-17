@@ -41,10 +41,12 @@ export default {
       this.$emit('change', tar)
     },
     up(idx) {
+      // 更换位置
       const source = this.lines.splice(idx, 1)
       this.lines.splice(idx - 1, 0, source[0])
     },
     down(idx) {
+      // 更换位置
       const source = this.lines.splice(idx, 1)
       this.lines.splice(idx + 1, 0, source[0])
     },
