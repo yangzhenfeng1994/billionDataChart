@@ -32,6 +32,7 @@
         @dblclickInfo="dblclickInfo"
         @clickLayers="clickLayers"
         @contextmenuInfo="contextmenuInfo"
+        @selection="selection"
       ></charts>
       <setMaxModal
         v-if="setLineOptionIdx !== -1"
@@ -40,15 +41,25 @@
         @sure="setLineOption"
       ></setMaxModal>
       <clickYmodal
-        v-if="showClickYmodal"
-        :value="showClickYmodalInfo"
-        @close="showClickYmodal = false"
+        v-if="showModal === 1"
+        :value="showModalInfo"
+        @close="showModal = 0"
       ></clickYmodal>
       <contextmenuModal
-        v-if="showContextmenuModal"
-        :value="showContextmenuModalInfo"
-        @close="showContextmenuModal = false"
+        v-if="showModal === 2"
+        :value="showModalInfo"
+        @close="showModal = 0"
       ></contextmenuModal>
+      <selectionXmodal
+        v-if="showModal === 3"
+        :value="showModalInfo"
+        @close="showModal = 0"
+      ></selectionXmodal>
+      <selectionBlockModal
+        v-if="showModal === 4"
+        :value="showModalInfo"
+        @close="showModal = 0"
+      ></selectionBlockModal>
     </div>
   </div>
 </template>
@@ -60,6 +71,8 @@ import settting from './components/setting.vue'
 import setMaxModal from './components/setMaxModal'
 import clickYmodal from './components/clickYmodal'
 import contextmenuModal from './components/contextmenuModal'
+import selectionXmodal from './components/selectionXmodal'
+import selectionBlockModal from './components/selectionBlockModal'
 
 import charts from '@/components/BillionDataChartsPubComponent'
 
@@ -74,6 +87,8 @@ export default {
     setMaxModal,
     clickYmodal,
     contextmenuModal,
+    selectionXmodal,
+    selectionBlockModal,
   },
   data() {
     return {
@@ -93,10 +108,8 @@ export default {
       wrapperWidth: 2000,
       setLineOptionIdx: -1,
       contrastDateId: '',
-      showClickYmodal: false,
-      showClickYmodalInfo: {},
-      showContextmenuModal: false,
-      showContextmenuModalInfo: {},
+      showModal: 0,
+      showModalInfo: {},
     }
   },
   computed: {
@@ -266,18 +279,43 @@ export default {
     },
     clickLayers(xIdx, yArr) {
       if (!yArr.length) return
-      this.showClickYmodalInfo = {
+      this.showModalInfo = {
         lines: this.lines.filter((item, idx) => yArr.includes(idx)),
         xData: this.filterXdata[xIdx],
         yDatas: this.filterYdata
           .filter((item, idx) => yArr.includes(idx))
           .map((item) => item.map((child) => child[xIdx])),
       }
-      this.showClickYmodal = true
+      this.showModal = 1
     },
     contextmenuInfo(arr) {
-      this.showContextmenuModal = true
-      this.showContextmenuModalInfo = arr
+      this.showModal = 2
+      this.showModalInfo = arr
+    },
+    selection(data) {
+      const { startIdx, endIdx, yArr, event } = data
+      this.showModal = event.metaKey ? 4 : 3
+      if (event.metaKey) {
+        // 划块的
+        this.showModalInfo = {
+          xData: this.filterXdata.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx)),
+          yData: this.filterYdata
+            .filter((item, idx) => yArr.includes(idx))
+            .map((item) =>
+              item.map((child) =>
+                child.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx))
+              )
+            ),
+        }
+      } else {
+        // x 轴的
+        this.showModalInfo = {
+          xData: this.filterXdata.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx)),
+          yData: this.filterYdata.map((item) =>
+            item.map((child) => child.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx)))
+          ),
+        }
+      }
     },
   },
   mounted() {

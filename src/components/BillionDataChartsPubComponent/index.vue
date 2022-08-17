@@ -1,6 +1,6 @@
 <template>
   <div ref="BillionDataCharts" class="BillionDataCharts" @mouseleave="mouseleave">
-    <div class="layers" ref="layers" @click="clickLayers">
+    <div class="layers" ref="layers" @click="clickLayers" @mousedown="mousedown">
       <chartLayer
         ref="charts"
         :xData="xData"
@@ -100,6 +100,14 @@ export default {
       type: Number,
       default: 20,
     },
+    events: {
+      type: Object,
+      default() {
+        return {
+          clickLayers: false,
+        }
+      },
+    },
   },
   computed: {
     mousePercent() {
@@ -123,6 +131,10 @@ export default {
       dragIdx: -1,
       start: 0,
       init: 0,
+      dragging: false,
+      dragStartX: 0,
+      dragStartY: 0,
+      dragStartIdx: -1,
     }
   },
   methods: {
@@ -141,6 +153,12 @@ export default {
         this.layerHeight = utils.getStyle(this.$refs.layers, 'height')
       })
     },
+    mousedown() {
+      this.dragging = true
+      this.dragStartX = this.mouseX
+      this.dragStartY = this.mouseY
+      this.dragStartIdx = this.mouseIdx
+    },
     mousemove(e) {
       this.mouseX = utils.getTargetMouseX(e, this.$refs.BillionDataCharts)
       this.mouseY = utils.getTargetMouseY(e, this.$refs.BillionDataCharts)
@@ -151,11 +169,40 @@ export default {
     mouseleave() {
       this.mouseX = -10000
     },
-    mouseup() {
-      if (this.dragArr) {
-        this.initCharts(this.dragIdx)
-      }
+    mouseup(e) {
+      if (this.dragArr) this.initCharts(this.dragIdx)
       this.dragArr = null
+
+      if (this.dragging) {
+        const yArr = []
+        let t = 0
+        const minY = Math.min(this.mouseY, this.dragStartY)
+        const maxY = Math.max(this.mouseY, this.dragStartY)
+        this.lines.forEach((item, idx) => {
+          const nowYtop = t + (this.tops[idx] || 0)
+          const nowYbottom = nowYtop + (this.heights[idx] || 100)
+
+          if (
+            (nowYtop >= minY && nowYtop <= maxY) ||
+            (nowYbottom >= minY && nowYbottom <= maxY) ||
+            (minY >= nowYtop && maxY <= nowYbottom)
+          ) {
+            yArr.push(idx)
+          }
+          t += this.heights[idx] || 100
+        })
+        this.$emit('selection', {
+          startX: this.dragStartX,
+          startY: this.dragStartY,
+          endX: this.mouseX,
+          endY: this.mouseY,
+          startIdx: this.dragStartIdx,
+          endIdx: this.mouseIdx,
+          yArr,
+          event: e,
+        })
+        this.dragging = false
+      }
     },
     dragInfo(type, idx, e) {
       this.dragArr = type === 'height' ? this.heights : this.tops
@@ -168,6 +215,7 @@ export default {
       this.$set(this.dragArr, this.dragIdx, tar)
     },
     clickLayers() {
+      if (this.events.clickLayers === false) return
       const arr = []
       let t = 0
       this.lines.forEach((item, idx) => {

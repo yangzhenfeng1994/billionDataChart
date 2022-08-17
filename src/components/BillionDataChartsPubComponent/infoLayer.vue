@@ -77,9 +77,8 @@ export default {
     drag(type, idx, e) {
       this.$emit('drag', type, idx, e)
     },
-    select(item, idx) {
+    select(item) {
       this.selectedLine = item
-      console.log(idx)
     },
     contextmenu(e, item, idx) {
       if (this.selectedLine !== item) return

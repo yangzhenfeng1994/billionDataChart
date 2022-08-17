@@ -25,8 +25,4 @@ export default {
     }
     return 0
   },
-  debounce(fn, time, option) {
-    const { query } = option
-    console.log('yzf', fn, time, query)
-  },
 }
