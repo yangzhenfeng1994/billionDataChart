@@ -85,7 +85,7 @@ export default {
       }
       data.forEach((item) => {
         option.series.push({
-          type: 'line',
+          type: this.line.type,
           data: item,
           legendHoverLink: false,
           triggerLineEvent: false,
