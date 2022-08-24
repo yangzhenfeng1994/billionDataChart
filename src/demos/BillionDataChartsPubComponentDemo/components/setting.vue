@@ -10,6 +10,12 @@
     <div class="item">
       <el-switch v-model="data.receiveClick" active-text="点击" inactive-text="拖动"> </el-switch>
     </div>
+    <div class="item scale">
+      <el-select v-model="data.chartType">
+        <el-option :value="'default'">default</el-option>
+        <el-option :value="'style1'">style1</el-option>
+      </el-select>
+    </div>
     <div class="item">
       <el-button @click="play">播放</el-button>
     </div>
@@ -84,7 +90,7 @@ export default {
       width: 60px;
     }
     .el-select {
-      width: 60px;
+      // width: 60px;
     }
   }
 }

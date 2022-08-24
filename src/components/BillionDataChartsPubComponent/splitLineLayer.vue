@@ -2,11 +2,25 @@
   <div class="splitLineLayer">
     <!-- 虚线 -->
     <div class="dottedLines">
-      <div class="line" v-for="line in dottedArr" :key="line" :style="{ left: line + 'px' }"></div>
+      <div
+        class="line"
+        v-for="line in dottedArr"
+        :key="line.value"
+        :style="{ left: line.left + 'px' }"
+      >
+        {{ line.value }}
+      </div>
     </div>
     <!-- 实线 -->
     <div class="solidLines">
-      <div class="line" v-for="line in solidArr" :key="line" :style="{ left: line + 'px' }"></div>
+      <div
+        class="line"
+        v-for="line in solidArr"
+        :key="line.value"
+        :style="{ left: line.left + 'px' }"
+      >
+        {{ line.value }}
+      </div>
     </div>
   </div>
 </template>
@@ -60,7 +74,10 @@ export default {
       const arr = []
       let s = this.start + this.solidLineGap - (this.start % this.solidLineGap)
       for (let i = s; i <= this.end; i += this.solidLineGap) {
-        arr.push((i - this.start) * this.singleWidth)
+        arr.push({
+          left: (i - this.start) * this.singleWidth,
+          value: i,
+        })
       }
       return arr
     },
@@ -69,7 +86,10 @@ export default {
       const arr = []
       let s = this.start + this.dottedLineGap - (this.start % this.dottedLineGap)
       for (let i = s; i <= this.end; i += this.dottedLineGap) {
-        arr.push((i - this.start) * this.singleWidth)
+        arr.push({
+          left: (i - this.start) * this.singleWidth,
+          value: i,
+        })
       }
       return arr
     },

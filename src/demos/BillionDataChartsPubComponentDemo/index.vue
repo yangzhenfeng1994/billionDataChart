@@ -34,6 +34,7 @@
         :yData="filterYdata"
         :lines="selectedLines"
         :dates="selectedDates"
+        :type="settings.chartType"
         :contrastDateIdx="contrastDateIdx"
         @dblclickInfo="dblclickInfo"
         @clickLayers="clickLayers"
@@ -122,6 +123,7 @@ export default {
         scale: 1, // 缩放比例
         now: 50, // 当前中心点
         receiveClick: false, // 图表监听点击事件还是拖动事件
+        chartType: 'default',
       },
       wrapperWidth: 2000, // 图表部分的宽度,用来计算采样率
       setLineOptionIdx: -1, // 双击通道信息设置通道的时候,双击的通道索引

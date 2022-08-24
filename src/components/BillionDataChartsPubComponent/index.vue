@@ -1,5 +1,11 @@
 <template>
-  <div ref="BillionDataCharts" class="BillionDataCharts" @mouseleave="mouseleave">
+  <div
+    ref="BillionDataCharts"
+    class="BillionDataCharts"
+    :class="type"
+    @mouseleave="mouseleave"
+    @scroll="scroll"
+  >
     <!-- 图层 -->
     <div class="layers" ref="layers" @click="clickLayers" @mousedown="mousedown">
       <!-- 图表图层 -->
@@ -111,6 +117,10 @@ export default {
       // 虚线辅助线间隔
       type: Number,
       default: 20,
+    },
+    type: {
+      type: String,
+      default: 'default',
     },
     events: {
       // 禁用和接受的事件列表,暂无用
@@ -244,6 +254,7 @@ export default {
       // 更新拖动通道的数据
       const tar = this.init + this.clientY - this.start
       this.$set(this.dragArr, this.dragIdx, tar)
+      this.getWrapperWidth()
     },
     clickLayers() {
       // 点击了图层,判断点击的索引和涉及的通道
@@ -265,6 +276,9 @@ export default {
     contextmenuInfo(item, idx) {
       // 右击了通道信息
       this.$emit('contextmenuInfo', this.yData[idx])
+    },
+    scroll(e) {
+      console.log('yzf', e)
     },
   },
   mounted() {
@@ -304,6 +318,16 @@ export default {
     width: 100px;
     flex: 0 0 auto;
     border-left: 1px solid #eee;
+  }
+
+  &.style1 {
+    .infos {
+      order: -1;
+      .infoLayer {
+        margin: 0;
+        padding: 0;
+      }
+    }
   }
 }
 </style>
