@@ -1,66 +1,16 @@
 <template>
   <div class="CustomAcount" :class="options.alignItems" ref="wrapper">
     <div class="line" v-if="options.line !== false"></div>
-    <template v-for="item in data">
-      <station
-        class="CustomAcountItem"
-        v-if="item.type === 'station'"
-        :key="item.id"
-        :data="item"
-        :options="options"
-        :singleMeterrPx="singleMeterrPx"
-      ></station>
-      <bridge
-        class="CustomAcountItem"
-        v-if="item.type === 'bridge'"
-        :key="item.id"
-        :data="item"
-        :options="options"
-        :singleMeterrPx="singleMeterrPx"
-      ></bridge>
-      <tunnel
-        class="CustomAcountItem"
-        v-if="item.type === 'tunnel'"
-        :key="item.id"
-        :data="item"
-        :options="options"
-        :singleMeterrPx="singleMeterrPx"
-      ></tunnel>
-      <switchComp
-        class="CustomAcountItem"
-        v-if="item.type === 'switch'"
-        :key="item.id"
-        :data="item"
-        :options="options"
-        :singleMeterrPx="singleMeterrPx"
-      >
-      </switchComp>
-      <curve
-        class="CustomAcountItem"
-        v-if="item.type === 'curve'"
-        :key="item.id"
-        :data="item"
-        :options="options"
-        :singleMeterrPx="singleMeterrPx"
-      >
-      </curve>
-      <culvert
-        class="CustomAcountItem"
-        v-if="item.type === 'culvert'"
-        :key="item.id"
-        :data="item"
-        :options="options"
-        :singleMeterrPx="singleMeterrPx"
-      ></culvert>
-      <ballast
-        class="CustomAcountItem"
-        v-if="item.type === 'ballast'"
-        :key="item.id"
-        :data="item"
-        :options="options"
-        :singleMeterrPx="singleMeterrPx"
-      ></ballast>
-    </template>
+    <component
+      v-for="item in data"
+      :key="item.id"
+      class="CustomAcountItem"
+      :is="items[item.type]"
+      :data="item"
+      :options="options"
+      :singleMeterrPx="singleMeterrPx"
+      @click="clickItem(item)"
+    ></component>
   </div>
 </template>
 
@@ -114,6 +64,7 @@ export default {
     return {
       wrapperWidth: 0,
       wrapperHeight: 0,
+      items: { station, bridge, tunnel, switch: switchComp, curve, culvert, ballast },
     }
   },
   methods: {
@@ -124,6 +75,9 @@ export default {
         this.wrapperWidth = style.width
         this.wrapperHeight = style.height
       })
+    },
+    clickItem(item) {
+      this.$emit('click', item)
     },
   },
   mounted() {
@@ -172,6 +126,7 @@ export default {
     width: max-content;
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
 }
 </style>

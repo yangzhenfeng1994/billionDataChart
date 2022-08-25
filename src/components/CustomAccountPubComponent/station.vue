@@ -1,6 +1,9 @@
 <template>
-  <div :style="style">
-    <div class="station">{{ data.name }} {{ data.centerMileage }}</div>
+  <div :style="style" @click="$emit('click')">
+    <div class="station">
+      {{ data.name }}
+      <!-- {{ data.centerMileage }} -->
+    </div>
   </div>
 </template>
 

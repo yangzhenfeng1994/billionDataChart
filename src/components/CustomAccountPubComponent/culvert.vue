@@ -1,5 +1,5 @@
 <template>
-  <div :style="style">
+  <div :style="style" @click="$emit('click')">
     <div class="chart">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icon-a-icon-hanqu"></use>
@@ -7,8 +7,8 @@
     </div>
     <div class="culvert">
       <div class="name">{{ data.name }}</div>
-      <div class="centerMileage">{{ data.centerMileage }}</div>
-      <div class="length">{{ data.length }}</div>
+      <!-- <div class="centerMileage">{{ data.centerMileage }}</div> -->
+      <!-- <div class="length">{{ data.length }}</div> -->
     </div>
   </div>
 </template>

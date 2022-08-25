@@ -24,7 +24,7 @@
     </div>
     <div class="componentsWrap">
       <div class="component">
-        <customAccount :options="options" :data="filterData"></customAccount>
+        <customAccount :options="options" :data="filterData" @click="click"></customAccount>
       </div>
     </div>
   </div>
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      range: [600, 700],
+      range: [0, 700],
       checkList: ['station', 'bridge', 'tunnel', 'switch', 'curve', 'culvert', 'ballast'],
       max: 1000,
       types: [
@@ -129,6 +129,9 @@ export default {
       }
       fn()
       this.start = 0
+    },
+    click(item) {
+      console.log('yzf', item)
     },
   },
   watch: {

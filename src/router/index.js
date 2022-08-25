@@ -3,12 +3,7 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-const pages = [
-  {
-    path: '/monitorChart',
-    component: () => import('../views/monitorChart/index.vue'),
-  },
-]
+const pages = []
 
 // 公共组件的 demo, 后续打包的时候需要处理掉
 const demos = [

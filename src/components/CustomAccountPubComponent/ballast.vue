@@ -1,5 +1,5 @@
 <template>
-  <div :style="style">
+  <div :style="style" @click="$emit('click')">
     <div class="ballast" :style="ballastStyle">
       <div class="l">
         <span>

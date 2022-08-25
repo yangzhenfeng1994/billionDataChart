@@ -1,5 +1,5 @@
 <template>
-  <div :style="style">
+  <div :style="style" @click="$emit('click')">
     <div class="curve" :style="curveStyle" :class="data.l ? 'left' : 'right'">
       <div class="chart">
         <div class="start">
@@ -16,7 +16,7 @@
       </div>
       <div class="desc">
         <div class="lr">{{ data.l ? 'L' : 'R' }}= {{ data.l || data.r }}</div>
-        <div class="startMileage">
+        <!-- <div class="startMileage">
           {{ data.startMileage }}
         </div>
         <div class="endMileage">
@@ -24,7 +24,7 @@
         </div>
         <div class="i">I:{{ data.i }}</div>
         <div class="height">H:{{ data.height }}</div>
-        <div class="length">L:{{ data.length }}</div>
+        <div class="length">L:{{ data.length }}</div> -->
       </div>
     </div>
   </div>

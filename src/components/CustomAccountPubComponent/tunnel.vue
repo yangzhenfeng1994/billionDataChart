@@ -1,5 +1,5 @@
 <template>
-  <div :style="style">
+  <div :style="style" @click="$emit('click')">
     <div class="tunnel" :style="tunnelStyle">
       <div class="start">
         <svg class="icon" aria-hidden="true">
@@ -15,13 +15,13 @@
         <div class="name">
           {{ data.name }}
         </div>
-        <div class="num">
+        <!-- <div class="num">
           {{ data.num }}
         </div>
         <div class="centerMileage">
           {{ data.centerMileage }}
         </div>
-        <div class="length">L:{{ data.length }}</div>
+        <div class="length">L:{{ data.length }}</div> -->
       </div>
     </div>
   </div>
