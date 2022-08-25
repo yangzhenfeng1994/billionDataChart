@@ -4,6 +4,7 @@
 范围|描述|commitId
 --|--|--
  billionchart | 分割线增加数值 | [2f3c808](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/2f3c808)
+ customAccount | 增加点击事件，整理代码 | [53ef429](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/53ef429)
  pubComponent page | 增加大数据量图表，波形图页面 | [a8698a1](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/a8698a1)
  pubComponent page | 增加大数据量图表，波形图页面 | [7106c75](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/7106c75)
  pubComponent pages | 增加注释，增加点击和拖动事件切换 | [b9071bf](http://192.168.1.102:9900/yangzhenfeng/tky-front/commits/b9071bf)

@@ -1,11 +1,5 @@
 <template>
-  <div
-    ref="BillionDataCharts"
-    class="BillionDataCharts"
-    :class="type"
-    @mouseleave="mouseleave"
-    @scroll="scroll"
-  >
+  <div ref="BillionDataCharts" class="BillionDataCharts" :class="type" @mouseleave="mouseleave">
     <!-- 图层 -->
     <div class="layers" ref="layers" @click="clickLayers" @mousedown="mousedown">
       <!-- 图表图层 -->
@@ -139,6 +133,13 @@ export default {
       // 当前鼠标位置的x轴下标
       return Math.round(this.xData.length * this.mousePercent)
     },
+    minTop() {
+      let n = 0
+      return this.heights.map((item) => {
+        n += item ?? 100
+        return -(n - item ?? 100)
+      })
+    },
   },
   data() {
     return {
@@ -151,6 +152,7 @@ export default {
       clientX: -1000, // 鼠标位于窗口左侧的距离
       clientY: -1000, // 鼠标位于窗口上侧的距离
       dragArr: [], // 拖动通道信息的时候,拖动的是高度还是位置
+      dragType: '',
       dragIdx: -1, // 拖动的通道的索引
       start: 0, // 开始拖动的位置
       init: 0, // 当前通道开始拖动的初始数值
@@ -249,10 +251,14 @@ export default {
       this.dragIdx = idx
       this.start = e.clientY
       this.init = this.dragArr[idx] || (type === 'height' ? 100 : 0)
+      this.dragType = type
     },
     dragItem() {
       // 更新拖动通道的数据
-      const tar = this.init + this.clientY - this.start
+      let tar = this.init + this.clientY - this.start
+      if (this.dragType === 'top') {
+        tar = Math.max(this.minTop[this.dragIdx], tar)
+      }
       this.$set(this.dragArr, this.dragIdx, tar)
       this.getWrapperWidth()
     },
@@ -279,6 +285,16 @@ export default {
     },
     scroll(e) {
       console.log('yzf', e)
+    },
+  },
+  watch: {
+    lines: {
+      deep: true,
+      immediate: true,
+      handler(n) {
+        this.heights = new Array(n.length).fill(100)
+        this.tops = new Array(n.length).fill(0)
+      },
     },
   },
   mounted() {
