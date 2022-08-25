@@ -5,8 +5,8 @@
       <!-- 图表图层 -->
       <chartLayer
         ref="charts"
-        :xData="xData"
-        :yData="yData"
+        :xData="filterXdata"
+        :yData="filterYdata"
         :lines="lines"
         :dates="dates"
         :styles="{
@@ -16,7 +16,7 @@
       ></chartLayer>
       <!-- 辅助线图层 -->
       <splitLineLayer
-        :xData="xData"
+        :xData="filterXdata"
         :solidLineGap="solidLineGap"
         :dottedLineGap="dottedLineGap"
         :layerWidth="layerWidth"
@@ -26,7 +26,7 @@
         :lines="lines"
         :mouseX="mouseX"
         :mouseY="mouseY"
-        :yData="yData"
+        :yData="filterYdata"
         :dates="dates"
         :contrastDateIdx="contrastDateIdx"
         :mouseIdx="mouseIdx"
@@ -38,7 +38,7 @@
     <div class="infos">
       <infoLayer
         :lines="lines"
-        :yData="yData"
+        :yData="filterYdata"
         :contrastDateIdx="contrastDateIdx"
         :mouseIdx="mouseIdx"
         :styles="{
@@ -123,15 +123,101 @@ export default {
         return {}
       },
     },
+    sampling: {
+      type: [String, Boolean],
+      default: false,
+    },
+    startPercent: {
+      type: Number,
+      default: 0,
+    },
+    endPercent: {
+      type: Number,
+      default: 100,
+    },
+    wrapperWidth: {
+      type: Number,
+      default: 100,
+    },
   },
   computed: {
+    // 降采样相关
+    showPercent() {
+      return this.endPercent - this.startPercent
+    },
+    dataLength() {
+      // x 轴一共有多长
+      return this.xData.length
+    },
+    windowXdata() {
+      if (!this.sampling) return this.xData
+      // 窗口化 x 轴数据,先取出来当前需要展示的,不需要展示的先不用管
+      const length = this.dataLength
+      const data = this.xData.slice(
+        ~~((length * this.startPercent) / 100),
+        ~~((length * this.endPercent) / 100)
+      )
+      return data
+    },
+    windowYdata() {
+      if (!this.sampling) return this.yData
+      // 窗口化 y 轴数据,同上
+      const length = this.dataLength
+      return this.yData.map((item, idx) => {
+        const translate = this.lines[idx]?.x || 0
+        const lineSliceStart = Math.min(
+          100 - this.showPercent,
+          Math.max(0, this.startPercent + translate)
+        )
+        const lineSliceEnd = Math.min(100, Math.max(this.showPercent, this.endPercent + translate))
+        return item.map((child) => {
+          const sliceStart = ~~((length * lineSliceStart) / 100)
+          const sliceEnd = ~~((length * lineSliceEnd) / 100)
+          return child.slice(sliceStart, sliceEnd)
+        })
+      })
+    },
+    samplingRate() {
+      // 计算采样率 = 当前窗口一共要展示多少数据 / 当前展示数据窗口的宽度,最小采样率是 1
+      // 当前窗口一共要展示多少数据 = 当前 x 轴一共多少数据 / 100 * 需要展示的百分比 = 当前窗口后的数据
+      return Math.max(1, ((this.xData.length / 100) * this.showPercent) / this.wrapperWidth)
+    },
+    filterXdata() {
+      if (!this.sampling) return this.xData
+      // 对窗口化后的数据采样,目前采样策略是取一组里的最大值
+      const rate = this.samplingRate
+      const data = this.windowXdata
+      const res = []
+      for (let i = 0; i < data.length; i += rate) {
+        const arr = data.slice(i, i + rate)
+        res.push(Math.max(...arr))
+      }
+      return res
+    },
+    filterYdata() {
+      if (!this.sampling) return this.yData
+      // 对窗口化后的数据采样,目前采样策略是取一组里的最大值
+      const rate = this.samplingRate
+      const data = this.windowYdata
+      return data.map((item) => {
+        return item.map((child) => {
+          const res = []
+          for (let i = 0; i < child.length; i += rate) {
+            const arr = child.slice(i, i + rate)
+            res.push(Math.max(...arr))
+          }
+          return res
+        })
+      })
+    },
+    // 组件相关
     mousePercent() {
       // 当前鼠标位于图层左侧的百分比
       return this.mouseX / this.layerWidth
     },
     mouseIdx() {
       // 当前鼠标位置的x轴下标
-      return Math.round(this.xData.length * this.mousePercent)
+      return Math.round(this.filterXdata.length * this.mousePercent)
     },
     minTop() {
       let n = 0
@@ -245,6 +331,8 @@ export default {
           endIdx: this.mouseIdx, // 结束的索引
           yArr, // 涉及的通道数据
           event: e, // 事件对象,外界需要判断功能键
+          filterXdata: this.filterXdata,
+          filterYdata: this.filterYdata,
         })
         this.dragging = false
       }
@@ -281,11 +369,11 @@ export default {
         }
         t += this.heights[idx] || 100
       })
-      this.$emit('clickLayers', this.mouseIdx, arr)
+      this.$emit('clickLayers', this.mouseIdx, arr, this.filterXdata, this.filterYdata)
     },
     contextmenuInfo(item, idx) {
       // 右击了通道信息
-      this.$emit('contextmenuInfo', this.yData[idx])
+      this.$emit('contextmenuInfo', this.filterYdata[idx], this.filterXdata, this.filterYdata)
     },
     scroll(e) {
       console.log('yzf', e)

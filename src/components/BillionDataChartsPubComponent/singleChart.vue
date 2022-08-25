@@ -94,7 +94,7 @@ export default {
           },
           labelLine: false,
           symbol: 'none',
-          sampling: 'lttb',
+          // sampling: 'lttb',
           // 'lttb' 采用 Largest- Triangle - Three - Bucket 算法，可以最大程度保证采样后线条的趋势，形状和极值。
           // 'average' 取过滤点的平均值
           // 'max' 取过滤点的最大值

@@ -30,12 +30,16 @@
       <!-- 图表组件本体 -->
       <charts
         ref="charts"
-        :xData="filterXdata"
-        :yData="filterYdata"
+        :xData="xData"
+        :yData="yData"
         :lines="selectedLines"
         :dates="selectedDates"
         :type="settings.chartType"
         :contrastDateIdx="contrastDateIdx"
+        :startPercent="startPercent"
+        :endPercent="endPercent"
+        :wrapperWidth="wrapperWidth"
+        :sampling="'lttd'"
         @dblclickInfo="dblclickInfo"
         @clickLayers="clickLayers"
         @contextmenuInfo="contextmenuInfo"
@@ -153,67 +157,6 @@ export default {
       // 结束的百分比 = 开始的百分比 + 要展示的百分比
       return this.startPercent + this.showPercent
     },
-    dataLength() {
-      // x 轴一共有多长
-      return this.xData.length
-    },
-    windowXdata() {
-      // 窗口化 x 轴数据,先取出来当前需要展示的,不需要展示的先不用管
-      const length = this.dataLength
-      const data = this.xData.slice(
-        ~~((length * this.startPercent) / 100),
-        ~~((length * this.endPercent) / 100)
-      )
-      return data
-    },
-    windowYdata() {
-      // 窗口化 y 轴数据,同上
-      const length = this.dataLength
-      return this.yData.map((item, idx) => {
-        const translate = this.lines[idx]?.x || 0
-        const lineSliceStart = Math.min(
-          100 - this.showPercent,
-          Math.max(0, this.startPercent + translate)
-        )
-        const lineSliceEnd = Math.min(100, Math.max(this.showPercent, this.endPercent + translate))
-        return item.map((child) => {
-          const sliceStart = ~~((length * lineSliceStart) / 100)
-          const sliceEnd = ~~((length * lineSliceEnd) / 100)
-          return child.slice(sliceStart, sliceEnd)
-        })
-      })
-    },
-    samplingRate() {
-      // 计算采样率 = 当前窗口一共要展示多少数据 / 当前展示数据窗口的宽度,最小采样率是 1
-      // 当前窗口一共要展示多少数据 = 当前 x 轴一共多少数据 / 100 * 需要展示的百分比 = 当前窗口后的数据
-      return Math.max(1, ((this.xData.length / 100) * this.showPercent) / this.wrapperWidth)
-    },
-    filterXdata() {
-      // 对窗口化后的数据采样,目前采样策略是取一组里的最大值
-      const rate = this.samplingRate
-      const data = this.windowXdata
-      const res = []
-      for (let i = 0; i < data.length; i += rate) {
-        const arr = data.slice(i, i + rate)
-        res.push(Math.max(...arr))
-      }
-      return res
-    },
-    filterYdata() {
-      // 对窗口化后的数据采样,目前采样策略是取一组里的最大值
-      const rate = this.samplingRate
-      const data = this.windowYdata
-      return data.map((item) => {
-        return item.map((child) => {
-          const res = []
-          for (let i = 0; i < child.length; i += rate) {
-            const arr = child.slice(i, i + rate)
-            res.push(Math.max(...arr))
-          }
-          return res
-        })
-      })
-    },
     lineOption() {
       // 获取一下当前修改的通道配置,方便后续使用
       return this.lines[this.setLineOptionIdx]
@@ -323,15 +266,15 @@ export default {
         })
       }
     },
-    clickLayers(xIdx, yArr) {
+    clickLayers(xIdx, yArr, filterXdata, filterYdata) {
       // 如果监听拖动事件直接返回不处理
       if (!this.settings.receiveClick) return false
       // 点击图层,业务上为测量y轴数据,打开弹窗,处理数据,接受参数为(点击的 x 轴的下标, 点击包含的通道索引)
       if (!yArr.length) return
       this.showModalInfo = {
         lines: this.lines.filter((item, idx) => yArr.includes(idx)),
-        xData: this.filterXdata[xIdx],
-        yDatas: this.filterYdata
+        xData: filterXdata[xIdx],
+        yDatas: filterYdata
           .filter((item, idx) => yArr.includes(idx))
           .map((item) => item.map((child) => child[xIdx])),
       }
@@ -343,16 +286,17 @@ export default {
       this.showModalInfo = arr
     },
     selection(data) {
+      console.log('yzf', data)
       // 如果监听点击事件直接返回不处理
       if (this.settings.receiveClick) return false
       // 滑动选择通道,需要判断是否按了command 按键,按了就是框选,不按就是 x 轴测量,打开对应的弹窗
-      const { startIdx, endIdx, yArr, event } = data
+      const { startIdx, endIdx, yArr, event, filterXdata, filterYdata } = data
       this.showModal = event.metaKey ? 4 : 3
       if (event.metaKey) {
         // 划块的
         this.showModalInfo = {
-          xData: this.filterXdata.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx)),
-          yData: this.filterYdata
+          xData: filterXdata.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx)),
+          yData: filterYdata
             .filter((item, idx) => yArr.includes(idx))
             .map((item) =>
               item.map((child) =>
@@ -363,8 +307,8 @@ export default {
       } else {
         // x 轴的
         this.showModalInfo = {
-          xData: this.filterXdata.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx)),
-          yData: this.filterYdata.map((item) =>
+          xData: filterXdata.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx)),
+          yData: filterYdata.map((item) =>
             item.map((child) => child.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx)))
           ),
         }

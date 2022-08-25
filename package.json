@@ -12,15 +12,14 @@
     "log": "cross-env conventional-changelog --config ./node_modules/vue-cli-plugin-commitlint/lib/log -i CHANGELOG.md -s -r 0"
   },
   "dependencies": {
+    "@arcgis/core": "^4.24.7",
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "echarts": "^5.3.3",
     "element-ui": "^2.15.9",
-    "jquery": "^3.6.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0",
-    "zrender": "^5.3.2"
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.13",
@@ -43,7 +42,8 @@
     "lint-staged": "^13.0.3",
     "right-pad": "^1.0.1",
     "vue-cli-plugin-commitlint": "~1.0.12",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "esri-loader": "^3.6.0"
   },
   "eslintConfig": {
     "root": true,

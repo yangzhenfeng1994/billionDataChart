@@ -15,6 +15,10 @@ const demos = [
     path: '/demo2',
     component: () => import('../demos/customAccountDemo.vue'),
   },
+  {
+    path: '/demo3',
+    component: () => import('../demos/gisDemo.vue'),
+  },
 ]
 const routes = [
   ...demos,
