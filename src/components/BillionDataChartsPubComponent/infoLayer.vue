@@ -117,7 +117,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     background: #e9e9e9;
-    transition: 0.2s;
+    // transition: 0.2s;
     &:hover {
       background: rgba(0, 0, 0, 0.1);
       .bar {

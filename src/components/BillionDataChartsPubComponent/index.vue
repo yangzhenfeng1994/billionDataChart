@@ -140,6 +140,10 @@ export default {
         return -(n - item ?? 100)
       })
     },
+    maxTop() {
+      let max = this.heights.reduce((l, i) => (l += i ?? 100) && l, 0)
+      return this.minTop.map((item, idx) => max + item - this.heights[idx])
+    },
   },
   data() {
     return {
@@ -257,7 +261,7 @@ export default {
       // 更新拖动通道的数据
       let tar = this.init + this.clientY - this.start
       if (this.dragType === 'top') {
-        tar = Math.max(this.minTop[this.dragIdx], tar)
+        tar = Math.min(Math.max(this.minTop[this.dragIdx], tar), this.maxTop[this.dragIdx])
       }
       this.$set(this.dragArr, this.dragIdx, tar)
       this.getWrapperWidth()
